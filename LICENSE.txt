@@ -1,0 +1,7 @@
+YEAR: 2015 - 2016
+
+COPYRIGHT HOLDER: 
+    person("Aliceanne", "Szeliga", email = "aszeliga@hmc.edu", role = c("aut", "cre")),
+    person("Sunyoung", "Shin", email = "shin@stat.wisc.edu", role = "aut"),
+    person("Rene, "Welch", email = "welch@stat.wisc.edu", role = "aut"),
+    person("Sunduz", "Keles, email = "keles@stat.wisc.edu", role = "aut")
