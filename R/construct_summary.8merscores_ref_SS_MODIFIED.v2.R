@@ -1,6 +1,8 @@
 #############################
 rm(list=ls())
 library(data.table)
+
+importHumanMouse <- function()
 load("/p/keles/CAGI2015/volumeB/ProcessedData/escores8mer_ref_human_v2.Rda")
 enrscoresList_human <- enrscoresList
 NameM_human <- NameM
@@ -14,28 +16,8 @@ NameM <- rbind(NameM_human, NameM_mouse)
 
 
 #####Add unique protein names#####
+
 ProteinNames <- NameM[,2]
-
-## this should not be necessary anymore
-# ProteinNames[grep("Ehf", NameM[,2])]<-c("Ehf_Wei", "Ehf_Badis")
-# ProteinNames[grep("Elf3", NameM[,2])]<-c("Elf3_Wei", "Elf3_Badis")
-# ProteinNames[grep("Gabpa", NameM[,2])]<-c("Gabpa_Wei", "Gabpa_Badis")
-# ProteinNames[grep("Hoxa3", NameM[,2])]<-c("Hoxa3_Badis", "Hoxa3_Berger")
-# ProteinNames[grep("Nkx3-1", NameM[,2])]<-c("Nkx3-1_Badis", "Nkx3-1_Berger")
-# ProteinNames[grep("Sfpi1", NameM[,2])]<-c("Sfpi1_Wei", "Sfpi1_Badis")
-# ProteinNames[grep("Six6", NameM[,2])]<-c("Six6_Badis", "Six6_Berger")
-# ProteinNames[grep("Sox4", NameM[,2])]<-c("Sox4_Human", "Sox4_Mouse")
-# ProteinNames[grep("Spdef", NameM[,2])]<-c("Spdef_Wei", "Spdef_Badis")
-# ProteinNames[grep("Tcf1", NameM[,2])]<-c("Tcf1_Badis", "Tcf1_Berger")
-# 
-# ProteinNames[grep("GST-CSL", NameM[,2])[1:2]]<-c("GST-CSL_Fig2", "GST-CSL_Fig4")
-# ProteinNames[grep("MAML1-CSL-GST-NOTCH1", NameM[,2])]<-c("MAML1-CSL-GST-NOTCH1_Fig2", "MAML1-CSL-GST-NOTCH1_Fig5")
-# ProteinNames[grep("MAML1-CSL-GST-NOTCH2", NameM[,2])]<-c("MAML1-CSL-GST-NOTCH2_Fig5", "MAML1-CSL-GST-NOTCH2_FigS1")
-# 
-# ProteinNames[grep("FOXN4", NameM[,2])]<-"FOXN4_Human"
-# ProteinNames[grep("Foxn4", NameM[,2])]<-"Foxn4_Mouse"
-# ProteinNames[grep("GST-NOTCH1", NameM[,2])[1:4]]<-c("GST-NOTCH1_CSL-6His", "GST-NOTCH1_CSL-6His_MAML1", "GST-NOTCH1_Fig2", "GST-NOTCH1_Fig4")
-
 names(enrscoresList) <- ProteinNames
 ##############
 
