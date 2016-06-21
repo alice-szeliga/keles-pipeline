@@ -26,10 +26,13 @@ getEscoresInd <- function(RangeCols3To5, threshhold) {
 }
 
 ## Helper function to remove first row (header) from tables
-## fileLength is the correct file length without a header
-removeHeader <- function(filelength, dataTable) {
-  if(nrow(dataTable) == (fileLength + 1)) {
+## This assumes we know fileLength, the correct number of rows without a header
+removeHeader <- function(numRowsNoHeader, dataTable) {
+  if(nrow(dataTable) == (numRowsNoHeader + 1)) {
     dataTable = dataTable[-1,]
+  }
+  if(nrow(dataTable) != numRowsNoHeader) {
+    stop("Error, incorrect file length given in removeHeader")
   }
   return(dataTable)
 }
