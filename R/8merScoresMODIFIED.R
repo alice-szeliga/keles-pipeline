@@ -7,19 +7,20 @@ fileLength <- 32896
 threshhold <- 0.5
 
 
-## helper function written by me
+## helper functions written by me
 
+# input must be a data.table
 getCols3to5 <- function(scoresDT) {
-  ncol(scoresDT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>% 
+  ncol(scoresDT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>%
                  scoresDT[,.,with=FALSE] %>% return
 }
 
-getRangeCols3to5 <-function(Cols3To5) {
-  Cols3To5 %>% apply(.,2,range) %>% c(., Cols3To5) %>% return
+getRangeCols <-function(Cols3To5) {
+  apply(Cols3To5, 2, range) %>% return
 }
 
 getEscoresInd <- function(RangeCols3To5, threshhold) {
-    EscoresInd <- intersect(which(RangeCols3To5[1,] >=  -threshhold), 
+    EscoresInd <- intersect(which(RangeCols3To5[1,] >=  -threshhold),
                         which(RangeCols3To5[2,] <= threshhold))
     return(EscoresInd)
 }
@@ -33,22 +34,22 @@ removeHeader <- function(filelength, dataTable) {
   return(dataTable)
 }
 
-## call in construct_summ file is commented out 
+## call in construct_summ file is commented out
 CheckEscoresCol <- function(file.name) {
 
   scoresDT <- fread(file.name, header=FALSE)
   scoresDT <- removeHeader(filelength, scoresDT)
 
   Cols3To5 <- getCols3to5(scoresDT)
-  RangeCols3To5 <- getRangeCols3to5(Cols3To5)
+  RangeCols3To5 <- getRangeCols(Cols3To5)
   EscoresInd <- getEscoresInd(RangeCols3To5, threshhold)
   returnValues <- c(EscoresInd, scoresDT, Cols3To5)
 
   return(returnValues)
 
 ## easier version
- # file.name %>% fread(., header=FALSE) 
- #           %>% removeHeader(filelength, .) 
+ # file.name %>% fread(., header=FALSE)
+ #           %>% removeHeader(filelength, .)
  #            -> scoresDT
  # scoresDT  %>% getRangeCols3to%(.)
  #           %>% getEscoresInd(., threshhold)
@@ -65,7 +66,7 @@ CreateEscores<-function(file.name) {
   EscoresInd <- values[1]; scoresDT <- values[2]; Cols3To5 <- values[3]
 
   Escores <- Cols3To5[,EscoresInd,with=FALSE]
-  
+
 
   ## doing something to the 1st column of scoresDT
   ## think unlist turns a matrix into a list, but we're working w a column?
@@ -74,8 +75,8 @@ CreateEscores<-function(file.name) {
   mersSeq2 <- unlist(scoresDT[,2, with=FALSE])
   mersSeq <- cbind(mersSeq1, mersSeq2)
 
-  matchInd <- mapply(function(subseqs) unlist(apply(as.matrix(subseqs), 1, function(subseq) which(mersSeq==subseq, arr.ind=TRUE)[1,1])), 
-                   subseqList, 
+  matchInd <- mapply(function(subseqs) unlist(apply(as.matrix(subseqs), 1, function(subseq) which(mersSeq==subseq, arr.ind=TRUE)[1,1])),
+                   subseqList,
                    SIMPLIFY=FALSE)
   EscoresList <- mapply(function(x) Escores[x], matchInd)
   return(EscoresList)
