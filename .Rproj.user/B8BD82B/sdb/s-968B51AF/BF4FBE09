@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "library(testthat)\nlibrary(eqtl.pipeline)\n\ntest_check(\"eqtl.pipeline\")\n",
+    "created" : 1466448100479.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1462357500",
+    "id" : "BF4FBE09",
+    "lastKnownWriteTime" : 1466441031,
+    "last_content_update" : 1466441031,
+    "path" : "~/keles/R/eqtl.pipeline/tests/testthat.R",
+    "project_path" : "tests/testthat.R",
+    "properties" : {
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

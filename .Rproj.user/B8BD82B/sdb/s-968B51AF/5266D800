@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "CheckEscoresCol<-function(file.name) {\nscoresDT<-fread(file.name, header=TRUE)\nif(nrow(scoresDT)==32895) {\n  scoresDT<-fread(file.name, header=FALSE)\n} else if(nrow(scoresDT)==32896)\n  scoresDT<-fread(file.name, header=TRUE)\n  \nCols3To5<-scoresDT[,setdiff(seq(min(5, ncol(scoresDT))), 1:2), with=FALSE]\nRangeCols3To5<-apply(Cols3To5, 2, range)\nEscoresInd<-intersect(which(RangeCols3To5[1,]>=-0.5), which(RangeCols3To5[2,]<=0.5))\nEscoresInd\n}\n\nCreateEscores<-function(file.name) {\nscoresDT<-fread(file.name, header=TRUE)\nif(nrow(scoresDT)==32895) {\n  scoresDT<-fread(file.name, header=FALSE)\n} else if(nrow(scoresDT)==32896)\n  scoresDT<-fread(file.name, header=TRUE)\n  \nmersSeq1<-unlist(scoresDT[,1, with=FALSE])\nmersSeq2<-unlist(scoresDT[,2, with=FALSE])\nmersSeq<-cbind(mersSeq1, mersSeq2)\n\nCols3To5<-scoresDT[,setdiff(seq(min(5, ncol(scoresDT))), 1:2), with=FALSE]\nRangeCols3To5<-apply(Cols3To5, 2, range)\nEscoresInd<-intersect(which(RangeCols3To5[1,]>=-0.5), which(RangeCols3To5[2,]<=0.5))\nEscores<-Cols3To5[,EscoresInd,with=FALSE]\n\nmatchInd<-mapply(function(subseqs) unlist(apply(as.matrix(subseqs), 1, function(subseq) which(mersSeq==subseq, arr.ind=TRUE)[1,1])), subseqList, SIMPLIFY=FALSE)\nEscoresList<-mapply(function(x) Escores[x], matchInd)\nEscoresList\n}\n\n\n#load(\"/p/keles/CAGI2015/volumeB/ProcessedData/escores8mer_ref_human.Rda\")\n#sum(abs(enrscoresList$FOXN2-Escores[matchInd[[1]]]))\n",
+    "created" : 1466439357966.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1754786919",
+    "id" : "5266D800",
+    "lastKnownWriteTime" : 1466437012,
+    "last_content_update" : 1466437012,
+    "path" : "~/keles/R/eqtl.pipeline/R/8merScores.R",
+    "project_path" : "R/8merScores.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

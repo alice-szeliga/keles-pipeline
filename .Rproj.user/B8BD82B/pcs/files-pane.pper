@@ -1,0 +1,9 @@
+{
+    "path" : "~/keles/R/eqtl.pipeline",
+    "sortOrder" : [
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}
