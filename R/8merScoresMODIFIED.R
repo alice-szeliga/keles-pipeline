@@ -13,8 +13,8 @@ threshhold <- 0.5
 #' Returns 3rd to 5th columns
 #' 
 #' \code{getCols3to5} returns the 3rd - 5th columns of a data.table.
-#' If the table has less than 5 columns, it returns 3rd - max.
-#' If the table has less than 3 columns, it returns a null table.
+#'   If the table has less than 5 columns, it returns 3rd - max.
+#'   If the table has less than 3 columns, it returns a null table.
 #'
 #' @param DT data.table 
 #' @return a data.table of up to 3 columns
@@ -26,8 +26,8 @@ getCols3to5 <- function(DT) {
 #' Get range of a data.table's columns
 #' 
 #' \code{getRangeCols} finds the minimum and maximum of each column in DT, then
-#' returns a data table with the minimum in the first row and the maximum in
-#' the second row.
+#'   returns a data table with the minimum in the first row and the maximum in
+#'   the second row.
 #' 
 #' @param DT data.table
 #' @return a data.table with 2 rows and the same number of columns
@@ -44,9 +44,9 @@ getEscoresInd <- function(RangeCols3To5, threshhold) {
 #' Removes header from a data.table
 #' 
 #' \code{removeHeader} takes the proper number of rows for dt (numRowsNoHeader)
-#' and if dt has one extra row, it removes the first row (header) from dt.
-#' If dt does not have numRowsNoHeader rows, or numRowsNoHeader + 1 rows,
-#' this function returns an error.
+#'   and if dt has one extra row, it removes the first row (header) from dt.
+#'   If dt does not have numRowsNoHeader rows, or numRowsNoHeader + 1 rows,
+#'   this function returns an error.
 removeHeader <- function(numRowsNoHeader, dt) {
   if(nrow(dt) == (numRowsNoHeader + 1)) {
     dt = dt[-1,]

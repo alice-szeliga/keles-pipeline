@@ -1,44 +1,51 @@
-## removing all existing variables from the work space
-### remove this in package
+#### remove this??
 rm(list=ls())
-## importing libraries
-library(Biostrings)
-library(data.table)
-library(gtools)
 
+#' Extract all 8mers for given eQTL sequences
+#' 
+#' \code{extract8mers} Computes enrichment scores for all 8mers on the 150bp sequences 
+#'   given, output to drive
+#' 
+#' Calls helper functions from 8merScores.R
+#' @param datadir: string, directory where Uniprobe scores have been saved
+#' @param sampleDTLocation: string, file path of input data (in .Rdata format)
+#' @param outputDir: string, directory to save output to 
+#' @param organismName: string, "human" or "mouse
+#' 
+#' @return Returns null, saves output in outputDir/escores8mer_ref_human_v2.Rda
 
-### can remove these in package
-## Loading the functions CheckEscoresCol and CreateEscores
-#source("/p/keles/CAGI2015/volumeB/Exploratory/8merScores.R")
-#source("8merScoresMODIFIED.R")
+#' 
+extract8mers <- function(uniprobeDir, inputDTFile, outputDir, organismName) {
+  # getting correct subdirectory name from the input /Uniprobe location
+  if (organismName == "human") {
+    uniprobeDir = paste(uniprobeDir, "/Human", sep = "")
+  }
+  else if (organismName == "mouse") {
+    uniprobeDir = paste(uniprobeDir, "/Mouse", sep = "")
+  }
+  else {stop("Invalid organism name. Correct options: 'human' or 'mouse' ")}
+  
+  # importing Uniprobe data
+  all.result.files<-mixedsort(list.files(path=uniprobeDir, full.names=TRUE))
+  # importing input data
+  load(inputDTFile)
 
-extract8mers <- function(datadir, sampleFilename, outputLocation) {
-
-  ### fixed location - don't have to change
-  ### input from same location every time
-  #datadir<-"/p/keles/CAGI2015/volumeB/Data/UniProbe/Human"
-  all.result.files<-mixedsort(list.files(path=datadir, full.names=TRUE))
-  #all.result.files <- c("Sox4_8mers_v5.txt")
-
-
-  #load("/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData")
-  load("sampleFilename")
-
-
-  ## looking at 8mers in the sequences
+  # examining 8mers
   k <- 8
   ## list of lengths of all the reference sequences
   ## trainingDT needs to already be loaded into the environment
   lenCenter<-mapply(nchar, trainingDT$RefSeq)
 
   ## returns a list of all 8mer subsequences in each RefSeq
-  subseqList <- mapply(function(seq, len)  mapply(function(s) substr(seq, s, s+k-1), 1:(len-k+1)),
-                     trainingDT$RefSeq, lenCenter)
+  subseqList <- mapply(function(seq, len)  
+                       mapply(function(s) substr(seq, s, s+k-1), 
+                              1:(len-k+1)),
+                       trainingDT$RefSeq, lenCenter)
   ## labeling the subsequences with the eQTL positions?
   names(subseqList) <- trainingDT$ID
 
 
-  ## This was already commented out
+  ## This was already commented out AS
   #escoresCol<-mapply(CheckEscoresCol, all.result.files)
   #table(escoresCol)
 
@@ -46,17 +53,15 @@ extract8mers <- function(datadir, sampleFilename, outputLocation) {
                           function(x) CreateEscores(file.name=x),
                           mc.cores=20)
 
-  ## so it's splitting it into the File name and the Protein name for each file
+  # splits each file.name into the File name and the Protein name
   fname <- mapply(function(file.name) strsplit(file.name, "/")[[1]][9],
                   all.result.files)
   ## generating 1:length(fname). i dunno why
   names(fname) <- seq(length(fname))
 
-  ## old expression for determining protein names
-  #pname<-mapply(function(fname) strsplit(fname, "_")[[1]][1], fname)
-  ### NEW EXPRESSION FOR UNIQUE NAMES
+  # Creates unique names for each protein entered
   pname = sub("*(_8mers|_contig8mers).*", "", names)
-  ## NEW check protein names are unique
+  # Checks if any names were repeated
   if (anyDuplicated(pname)!=0) {
     print("Error: protein names repeated in extract8mers")
   }
@@ -64,6 +69,8 @@ extract8mers <- function(datadir, sampleFilename, outputLocation) {
   NameM <- cbind(fname, pname)
   colnames(NameM) <- c("File", "Protein")
 
-  #save(enrscoresList, NameM, file="/p/keles/CAGI2015/volumeB/ProcessedData/escores8mer_ref_human_v2.Rda")
-  save(enrscoresList, NameM, file="escores8mer_ref_human_v2.Rda")
+  # saving in directory outputDir with a specific filename
+  outputName <- paste("escores8mer_ref_", organismName, "_v2.Rda", sep = "")
+  outputFile <- paste(outputDir, outputName, sep = "/")
+  save(enrscoresList, NameM, file=outputFile)
 }
