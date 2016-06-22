@@ -9,14 +9,30 @@ threshhold <- 0.5
 
 ## helper functions written by me
 
-# input must be a data.table
-getCols3to5 <- function(scoresDT) {
-  ncol(scoresDT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>%
-                 scoresDT[,.,with=FALSE] %>% return
+
+#' Returns 3rd to 5th columns
+#' 
+#' \code{getCols3to5} returns the 3rd - 5th columns of a data.table.
+#' If the table has less than 5 columns, it returns 3rd - max.
+#' If the table has less than 3 columns, it returns a null table.
+#'
+#' @param DT data.table 
+#' @return a data.table of up to 3 columns
+getCols3to5 <- function(DT) {
+  ncol(DT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>%
+                 DT[,.,with=FALSE] %>% return
 }
 
-getRangeCols <-function(Cols3To5) {
-  apply(Cols3To5, 2, range) %>% return
+#' Get range of a data.table's columns
+#' 
+#' \code{getRangeCols} finds the minimum and maximum of each column in DT, then
+#' returns a data table with the minimum in the first row and the maximum in
+#' the second row.
+#' 
+#' @param DT data.table
+#' @return a data.table with 2 rows and the same number of columns
+getRangeCols <-function(DT) {
+  apply(DT, 2, range) %>% return
 }
 
 getEscoresInd <- function(RangeCols3To5, threshhold) {
@@ -25,19 +41,27 @@ getEscoresInd <- function(RangeCols3To5, threshhold) {
     return(EscoresInd)
 }
 
-## Helper function to remove first row (header) from tables
-## This assumes we know fileLength, the correct number of rows without a header
-removeHeader <- function(numRowsNoHeader, dataTable) {
-  if(nrow(dataTable) == (numRowsNoHeader + 1)) {
-    dataTable = dataTable[-1,]
+#' Removes header from a data.table
+#' 
+#' \code{removeHeader} takes the proper number of rows for dt (numRowsNoHeader)
+#' and if dt has one extra row, it removes the first row (header) from dt.
+#' If dt does not have numRowsNoHeader rows, or numRowsNoHeader + 1 rows,
+#' this function returns an error.
+removeHeader <- function(numRowsNoHeader, dt) {
+  if(nrow(dt) == (numRowsNoHeader + 1)) {
+    dt = dt[-1,]
   }
-  if(nrow(dataTable) != numRowsNoHeader) {
+  if(nrow(dt) != numRowsNoHeader) {
     stop("Error, incorrect file length given in removeHeader")
   }
-  return(dataTable)
+  return(dt)
 }
 
-## call in construct_summ file is commented out
+#'
+#'
+#' \code{CheckEscoresCol}
+#'
+#' called in construct_summ, but commented out
 CheckEscoresCol <- function(file.name) {
 
   scoresDT <- fread(file.name, header=FALSE)
@@ -60,7 +84,10 @@ CheckEscoresCol <- function(file.name) {
  #           %>% return(.)
 }
 
-
+#'
+#'
+#'\code{CreateEscores} is used to 
+#'
 ##called in construct_summ
 CreateEscores<-function(file.name) {
 

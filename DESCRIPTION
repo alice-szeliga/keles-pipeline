@@ -31,7 +31,11 @@ Imports:
     data.table(>= 1.9.6),
     gtools(>= 3.5.0),
     magrittr(>= 1.5)
+    
+Suggests: knitr
 
 License: MIT + file LICENSE
+
+VignetteBuilder: knitr
 
 LazyData: TRUE
