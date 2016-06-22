@@ -10,7 +10,7 @@ rm(list=ls())
 #' @param datadir: string, directory where Uniprobe scores have been saved
 #' @param sampleDTLocation: string, file path of input data (in .Rdata format)
 #' @param outputDir: string, directory to save output to 
-#' @param organismName: string, "human" or "mouse
+#' @param organismName: string, all lowercase, "human" or "mouse
 #' 
 #' @return Returns null, saves output in outputDir/escores8mer_ref_human_v2.Rda
 
@@ -23,7 +23,7 @@ extract8mers <- function(uniprobeDir, inputDTFile, outputDir, organismName) {
   else if (organismName == "mouse") {
     uniprobeDir = paste(uniprobeDir, "/Mouse", sep = "")
   }
-  else {stop("Invalid organism name. Correct options: 'human' or 'mouse' ")}
+  else {stop("Invalid organism name. Correct options: 'human' or 'mouse'")}
   
   # importing Uniprobe data
   all.result.files<-mixedsort(list.files(path=uniprobeDir, full.names=TRUE))

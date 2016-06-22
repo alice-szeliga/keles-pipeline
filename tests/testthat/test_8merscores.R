@@ -25,7 +25,6 @@ test_that("Helper fn getCols3to5 works for data.table with different # cols", {
 })
 
 test_that("Piping operator %>% works correctly in getCols3to5", {
-  # checking piping in getCols3to5
   expect_equal(
     ncol(scoresDT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>% scoresDT[,.,with=FALSE],
     scoresDT[,setdiff(seq(min(5, ncol(scoresDT))), 1:2), with=FALSE])
