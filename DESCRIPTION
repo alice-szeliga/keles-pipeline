@@ -27,10 +27,12 @@ Description: This model aims to predict regulatory and expression modulating
 Depends: R (>= 3.1.0)
 
 Imports:
-    Biostrings(>= 2.40.1),
+    Biostrings(>= 2.40.2),
     data.table(>= 1.9.6),
+    GenomicRanges(>= 1.24.2),
     gtools(>= 3.5.0),
-    magrittr(>= 1.5)
+    magrittr(>= 1.5),
+    rtracklayer(>= 1.32.1)
     
 Suggests: knitr
 

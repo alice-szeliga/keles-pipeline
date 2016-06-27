@@ -1,0 +1,72 @@
+## figure this out if i actually need to delete this i mean come on
+rm(list=ls())
+
+construct_overlapping_encodepeaks <- function(inputDTLocation, outputDir) {
+  load(inputDTLOcation)
+  trainingGranges<-with(trainingDT, GRanges(paste("chr", chr, sep=""), IRanges(start, end), id=ID))
+  #trainingGranges
+  #seqinfo: 22 sequences from an unspecified genome; no seqlengths
+  
+  setwd(outputDir)
+  load("encodePeaks_v3.Rda")
+  
+  #reorder GRanges
+  HistoneDNaseMethylInd<-c(grep("H3", names(uniquepeaks.narrow1)), grep("H4", names(uniquepeaks.narrow1)), grep("DNase", names(uniquepeaks.narrow1)), grep("DNAmethylation", names(uniquepeaks.narrow1)))
+  overlapping.names.ordered<-c(sort(names(uniquepeaks.narrow1)[HistoneDNaseMethylInd]), sort(names(uniquepeaks.narrow1)[setdiff(seq(length(uniquepeaks.narrow1)), HistoneDNaseMethylInd)]))
+  
+  overlapping.orderedInd<-apply(as.matrix(overlapping.names.ordered), 1, function(name.ordered) which(names(uniquepeaks.narrow1)==name.ordered))
+  uniquepeaks.narrow1.ordered<-uniquepeaks.narrow1[overlapping.orderedInd]
+  
+  trainingOverlapsAny<-apply(as.matrix(seq(length(uniquepeaks.narrow1.ordered))), 1, function(j) findOverlaps(trainingGranges, uniquepeaks.narrow1.ordered[[j]], type="any", select="all", ignore.strand="TRUE"))
+  training_overlapNo_all<-mapply(countQueryHits, trainingOverlapsAny)
+  colnames(training_overlapNo_all)<-names(uniquepeaks.narrow1.ordered)
+  #> which(colSums(training_overlapNo_all)==0)
+  #POLR3G_Weissman     ZZZ3_Struhl 
+  #             79             116 
+  
+  training_overlapNo<-training_overlapNo_all[,which(colSums(training_overlapNo_all)!=0)] #3044*114 matrix: the number of overlaps
+  #> table(as.numeric(training_overlapNo))
+  #     0      1      2      3      4      5      6      7      8      9     10 
+  #325631  21154     94     16     22     13     12      5      8     11      8 
+  #    11     12     13     14     15     16     17     19     20     21     22 
+  #     6      5      8      7      5      1      2      1      3      1      1 
+  #    25     26 
+  #     1      1 
+  
+  training_overlapBin<-ifelse(training_overlapNo==0, 0, 1) #3044*114 binary matrix
+  targets<-apply(as.matrix(colnames(training_overlapNo)), 1, function(feature) strsplit(feature, "_")[[1]][1])
+  targets.ft<-factor(targets, levels=unique(targets))
+  targets.no<-as.numeric(targets.ft)
+  training_overlapNo_uniqueTarget<-apply(as.matrix(unique(targets.no)), 1, function(no) {ind=which(targets.no==no); if(length(ind)==1) training_overlapNo[,ind] else rowSums(training_overlapNo[,ind])}) #3044*99 matrix: the number of overlaps
+  colnames(training_overlapNo_uniqueTarget)<-levels(targets.ft)
+  #> table(as.numeric(training_overlapNo_uniqueTarget))
+  #     0      1      2      3      4      5      6      7      8      9     10 
+  #280912  19468    708     83     85     14     12      5      8     11      8 
+  #    11     12     13     14     15     16     17     19     20     21     22 
+  #     6      5      8      7      5      1      2      1      3      1      1 
+  #    25     26 
+  #     1      1
+  
+  training_overlapBin_uniqueTarget<-apply(as.matrix(unique(targets.no)), 1, function(no) {ind=which(targets.no==no); if(length(ind)==1) training_overlapBin[,ind] else apply(training_overlapBin[,ind], 1, function(bin) ifelse(all(bin==0), 0, 1))}) #3044*99 matrix: binary matrix
+  colnames(training_overlapBin_uniqueTarget)<-levels(targets.ft)
+  #table(as.numeric(training_overlapBin_uniqueTarget))
+  #     0      1 
+  #280912  20444 
+  
+  #sum(abs(training_overlapBin_uniqueTarget-ifelse(training_overlapNo_uniqueTarget==0, 0 ,1))) #training__overlapBin_uniqueTarget correctly created double checked
+  
+  training_overlapNo_tf<-rowSums(training_overlapBin_uniqueTarget[,setdiff(seq(ncol(training_overlapBin_uniqueTarget)), 1:12)])
+  training_overlapBin_tf<-apply(training_overlapBin_uniqueTarget[,setdiff(seq(ncol(training_overlapBin_uniqueTarget)), 1:12)], 1, function(bin) ifelse(all(bin==0), 0, 1))
+  #sum(abs(ifelse(training_overlapNo_tf==0, 0, 1)-training_overlapBin_tf)) #training__overlapBin_tf correctly created double checked
+  #[1] 0
+  
+  training_overlap_Bin.No<-cbind(training_overlapBin_uniqueTarget[,1:12], training_overlapNo_tf)
+  training_overlap_Bin.Bin<-cbind(training_overlapBin_uniqueTarget[,1:12], training_overlapBin_tf)
+  colnames(training_overlap_Bin.No)[13]<-"TF_sum"
+  colnames(training_overlap_Bin.Bin)[13]<-"TF_bin"
+  
+  setwd(outputDir)
+  save(training_overlap_Bin.No, training_overlap_Bin.Bin, file="FeaturesEncodePeaksNarrow1_v3.Rda")
+  
+}
+

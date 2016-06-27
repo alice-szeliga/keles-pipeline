@@ -16,20 +16,20 @@ source('~/keles/R/eqtl.pipeline/R/construct_summary.8merscores_ref_SS_MODIFIED.v
 #'   Data set from CAGI 2015 challenge is /ProcessedData/SampleDT.Rdata
 #' @param outputDir: string, directory to save results to
 #' @return Null. Data saved to disk.
-run_Uniprobe_scores <- function(uniprobeDirectory = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData", 
-                                inputDTFile = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData",
+run_Uniprobe_scores <- function(uniprobeDirectory = "/p/keles/CAGI2015/volumeB/Data/UniProbe", 
+                                inputDTLocation = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData",
                                 outputDir = "/p/keles/CAGI2015/volumeB/ProcessedData") {
   
   # creating human 8mers - saved to outputDir/escores8mer_ref_human_v2.Rda"
-  extract8mers(uniprobeDirectory, inputDTFile, 
+  extract8mers(uniprobeDirectory, inputDTLocation, 
                outputDir, organismName = "human")
   
   # creating mouse 8mers - saved to outputDir/escores8mer_ref_mouse_v2.Rda"
-  extract8mers(uniprobeDirectory, inputDTFile,
+  extract8mers(uniprobeDirectory, inputDTLocation,
                outputDir, organismName = "mouse")
   
   # final output saved to disk 
   #   - in outputDir/Features8mersEscores_ref_v2.Rda
-  constructSummary8merScores(outputDir, inputDTFile)
+  constructSummary8merScores(outputDir, inputDTLocation)
 }
 

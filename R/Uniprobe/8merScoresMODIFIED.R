@@ -65,7 +65,7 @@ removeHeader <- function(numRowsNoHeader, dt) {
 CheckEscoresCol <- function(file.name) {
 
   scoresDT <- fread(file.name, header=FALSE)
-  scoresDT <- removeHeader(filelength, scoresDT)
+  scoresDT <- removeHeader(fileLength, scoresDT)
 
   Cols3To5 <- getCols3to5(scoresDT)
   RangeCols3To5 <- getRangeCols(Cols3To5)
