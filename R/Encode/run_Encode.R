@@ -4,6 +4,17 @@ library(rtracklayer)
 library(data.table)
 
 
+###rewriting this with system.file()
+## this looks for the data in inst
+run_encode <- function(chipMeta = system.file("ENCODE", "List", "ChIP-seq", "metadata.tsv", package = "eqtl.pipeline")
+                       dnaseMeta = system.file("ENCODE", "List", "DNase-seq", "metadata.tsv", package = "eqtl.pipeline")
+                       dnamethMeta= system.file("ENCODE", "List", "DNAmethylation", "metadata.tsv", package = "eqtl.pipeline")
+                       peakDir = "/p/keles/CAGI2015/volumeB/Data/ENCODE/peaks",
+                       inputDTLocation = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData",
+                       outputDir = "/p/keles/CAGI2015/volumeB/ProcessedData") {
+}
+
+
 #' ENCODE data 
 #' 
 #' Main function for ChIP, DNase, and DNA methylation from ENCODE
