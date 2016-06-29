@@ -6,12 +6,25 @@ library(data.table)
 
 ###rewriting this with system.file()
 ## this looks for the data in inst
-run_encode <- function(chipMeta = system.file("ENCODE", "List", "ChIP-seq", "metadata.tsv", package = "eqtl.pipeline")
-                       dnaseMeta = system.file("ENCODE", "List", "DNase-seq", "metadata.tsv", package = "eqtl.pipeline")
-                       dnamethMeta= system.file("ENCODE", "List", "DNAmethylation", "metadata.tsv", package = "eqtl.pipeline")
+run_encode <- function(chipMeta = system.file("ENCODE", "List", "ChIP-seq", 
+                                              "metadata.tsv", package = "eqtl.pipeline")
+                       dnaseMeta = system.file("ENCODE", "List", "DNase-seq", 
+                                               "metadata.tsv", package = "eqtl.pipeline")
+                       dnamethMeta= system.file("ENCODE", "List", "DNAmethylation", 
+                                                "metadata.tsv", package = "eqtl.pipeline")
                        peakDir = "/p/keles/CAGI2015/volumeB/Data/ENCODE/peaks",
                        inputDTLocation = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData",
                        outputDir = "/p/keles/CAGI2015/volumeB/ProcessedData") {
+  
+  # takes ChIP, DNase, and DNA methylation data from ENCODE data
+  # returns no output
+  # saves to disk at outputDir/encodePeaks_v3.Rda
+  extract_encodepeaks(chipLocation, dnaseLocation, dnamethLocation, peakDir, outputDir)
+  
+  # then finds the overlapping peaks
+  # returns no output
+  # saves to disk at outputDir/FeaturesEncodePeaksNarrow1_v3.Rda
+  construct_overlapping_encodepeaks(inputDTLocation, outputDir) 
 }
 
 
@@ -39,9 +52,12 @@ run_encode <- function(chipLocation = "/p/keles/CAGI2015/volumeB/Data/ENCODE/Lis
                        outputDir = "/p/keles/CAGI2015/volumeB/ProcessedData") {
   
   # takes ChIP, DNase, and DNA methylation data from ENCODE data
+  # returns no output
+  # saves to disk at outputDir/encodePeaks_v3.Rda
   extract_encodepeaks(chipLocation, dnaseLocation, dnamethLocation, peakDir, outputDir)
   
   # then finds the overlapping peaks
-  # returns no output - saves to disk at outputDir/FeaturesEncodePeaksNarrow1_v3.Rda
-  construct_overlapping_encodepeaks()  
+  # returns no output
+  # saves to disk at outputDir/FeaturesEncodePeaksNarrow1_v3.Rda
+  construct_overlapping_encodepeaks(inputDTLocation, outputDir)  
 }

@@ -1,4 +1,11 @@
-dt2granges <- function(dt) { #modified from a function on http://davetang.org/muse/2015/02/04/bed-granges/
+#' Converts data.table to Granges
+#'
+#' \code{dt2granges} converts a data.table object to Granges
+#'
+#' modified from a function on http://davetang.org/muse/2015/02/04/bed-granges/
+#' @param dt: a data.table object
+#' @returns Granges object containing same information
+dt2granges <- function(dt) { #
   df <- as.data.frame(dt)
   if(length(df) > 6){
     df <- df[,-c(7:length(df))]
@@ -18,7 +25,8 @@ dt2granges <- function(dt) { #modified from a function on http://davetang.org/mu
   library("GenomicRanges")
 
   if(length(df)==3){
-    # start position increased by 1 bc/ bed files start from 0, and end right after ranges. 
+    # start position increased by 1 bc/ bed files start from 0, 
+    #   and end right after ranges. 
     # i.e. the end position is not a peak region.
     gr <- with(df, GRanges(chr, IRanges(start+1, end))) 
   } 
@@ -29,11 +37,18 @@ dt2granges <- function(dt) { #modified from a function on http://davetang.org/mu
     gr <- with(df, GRanges(chr, IRanges(start+1, end), id=id, score=score))
   } 
   else if (length(df)==6){
-    gr <- with(df, GRanges(chr, IRanges(start+1, end), id=id, score=score, strand=strand))
+    gr <- with(df, GRanges(chr, IRanges(start+1, end), id=id, score=score, 
+                           strand=strand))
   }
   return(gr)
 }
 
+#' Converts data.table to UniqueGranges
+#'
+#' \code{dt2granges} converts a data.table object to unique Granges
+#'
+#' @param dt: a data.table object
+#' @returns Granges object containing unique peaks
 dt2uniquegranges <- function(bed.list) {
   peaks.granges.list0 <- mapply(dt2granges, bed.list)
   peaks.granges.list <- lapply(peaks.granges.list0, reduce)
@@ -52,11 +67,19 @@ dt2uniquegranges <- function(bed.list) {
 
   TargetLabInd <- as.numeric(factor(names(bed.list), 
                                     levels=unique(names(bed.list))))
-  unique.peaks.granges.list <- vector("list", length=length(unique(TargetLabInd)))
+  unique.peaks.granges.list <- vector("list", 
+                                      length=length(unique(TargetLabInd)))
   UniqueTargetLabInd <- which(table(TargetLabInd) == 1)
-  unique.peaks.granges.list[UniqueTargetLabInd] <- peaks.granges.list[which(is.element(TargetLabInd, UniqueTargetLabInd))]
+  unique.peaks.granges.list[UniqueTargetLabInd] 
+        <- peaks.granges.list[which(is.element(TargetLabInd, 
+                                                UniqueTargetLabInd))]
   DuplicateTargetLabInd <- which(table(TargetLabInd) > 1)
-  unique.peaks.granges.list[DuplicateTargetLabInd] <- apply(as.matrix(DuplicateTargetLabInd), 1, function(ind) {dup.ind<-which(is.element(TargetLabInd, ind)); dup.granges.list<-peaks.granges.list[dup.ind]; Reduce(union, dup.granges.list)})
+  unique.peaks.granges.list[DuplicateTargetLabInd] 
+        <- apply(as.matrix(DuplicateTargetLabInd), 
+                 1, 
+                 function(ind) {dup.ind<-which(is.element(TargetLabInd, ind)); 
+                                dup.granges.list<-peaks.granges.list[dup.ind]; 
+                                Reduce(union, dup.granges.list)})
   names(unique.peaks.granges.list) <- unique(names(bed.list))
   unique.peaks.granges.list
 }

@@ -2,13 +2,28 @@
 
 rm(list=ls())
 library(data.table)
+library(GenomicRanges)
+library(rtracklayer)
 
+
+#' Capitalizes words in a string
+#'
+#' \code{simpleCap} capitalizes the first letter of every word in a string
+#'
+#' Helper function for readChip, readDnase, and readDnameth
+#' @param x, a string with words separated by spaces
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
         sep="", collapse=" ")
 }
 
+#' read in ChIP data from ENCODE
+#'
+#' \code{readChip} reads in broad and narrow peak files from ENCODE ChiP metadata
+#'
+#' @param chipLocation: string, file location of ENCODE ChIP metadata.tsv
+#' @return data.table containing the ChIP info
 ##ChIP##
 readChip <- function(chipLocation) {
   metachip.all<-fread(chipLocation, header=TRUE)
@@ -40,6 +55,13 @@ readChip <- function(chipLocation) {
   #dim(metachip_peaks) #170*41
 }
 
+
+#' read in Dnase data from ENCODE
+#'
+#' \code{readChip} reads in narrow peak files from ENCODE Dnase metadata
+#'
+#' @param chipLocation: string, file location of ENCODE Dnase metadata.tsv
+#' @return data.table containing the Dnase info
 readDnase <- function(dnaseLocation) {
   ##DNase##
   metadnase.all<-fread(dnaseLocation, header=TRUE)
@@ -56,6 +78,14 @@ readDnase <- function(dnaseLocation) {
 #Crawford has 5 replicates; 5 fastq files for 3 replicates (error?); 5 bam files; 1 peak (1 bigBed, 1 bed.gz)
 ##########
 
+#' read in DNA methylation data from ENCODE
+#'
+#' \code{readChip} reads in files from ENCODE DNA 
+#'   methylation metadata
+#'
+#' @param chipLocation: string, file location of ENCODE DNA methylation 
+#'   metadata.tsv
+#' @return data.table containing the DNA methylation info
 readDnameth <- function(dnamethLocation) {
   ##DNAmethylation##
   metamethyl.all<-fread(dnamethLocation, header=TRUE)
@@ -72,8 +102,16 @@ readDnameth <- function(dnamethLocation) {
   return(metamethyl_peaks)
 }
 
-#Combine ChIP seq, DNase seq, DNAmethylation
-
+#' Combines all peak files from ENCODE
+#'
+#' \code{readChip} reads in ChIP seq, DNase seq, DNAmethylation and combines
+#'   the peaks into one file
+#'
+#' @param chipLocation: string, file location of ENCODE ChIP metadata.tsv
+#' @param dnaseLocation: string, file location of ENCODE DNase metadata.tsv
+#' @param dnamethLocation: string, file location of ENCODE DNA methylation 
+#'   metadata.tsv
+#' @return data.table containing all info from ChIP, DNase, and DNA methylation
 getMetaPeaks <- function(chipLocation, dnaseLocation, dnamethLocation) {
   metachip_peaks <- readChip(chipLocation)
   metadnase_peaks <- readDnase(dnaseLocation)
@@ -83,24 +121,33 @@ getMetaPeaks <- function(chipLocation, dnaseLocation, dnamethLocation) {
 }
 
 
-#create peak file names to put them under a directory automatically for chipseq; manually for dnaseseq and DNA methylation
-library(GenomicRanges)
-library(rtracklayer)
-library(data.table)
+#create peak file names to put them under a directory automatically for chipseq; 
+# manually for dnaseseq and DNA methylation
 
 
 ##not commented out by AS
 #unique(meta_peaks$FileFormat)
 #[1] "bed narrowPeak" "bed broadPeak"  "bed bedMethyl"
 
-##file_type is string of name
+#' Get name of Bed files for all peaks
+#'
+#' \code{getBedNames} gets a data.ta______
+#'
+#' @param file_type: string of file name
+#' @param meta_peaks: data.table of the ENCODE metadata
+#' @return a data.table of strings of all the bed file names
 getBedNames <- function(file_type, meta_peaks) {
   mapply(function(name) paste(name, ".bed", sep=""), 
          meta_peaks$FileAccession[grep(file_type, meta_peaks$FileFormat)])
 }
 
-
-## helper fn called by getBedList
+#' Read in a bed file
+#'
+#' \code{getBedDF} reads in a bed file and saves it as a data.table
+#'
+#' @param peakname: string, filename
+#' @return a data.table of ___
+#' helper fn called by getBedList
 getBedDF <- function(peakname) {
   bed.df<-read.table(peakname, header=FALSE)
   bed.dt<-as.data.table(bed.df)
@@ -108,12 +155,28 @@ getBedDF <- function(peakname) {
   bed.dt
 }
 
+#' Turns bed files into data.tables
+#'
+#' \code{getBedList} gets a list of data.tables containing bed file info
+#'
+#' @param bedNames: a list(?) of .bed file names
+#' @return a list of data.tables
+#' helper fn called by getAllLists
 getBedList <- function(bedNames) {
   apply(as.matrix(bedNames), 
         1, 
         getBedDF)
 }
 
+#'
+#'
+#' \code{getAllLists} separates the metadata of peaks into narrow peaks, broad
+#'   peaks, and methylation data, then returns a variety of lists of bed files,
+#'   including the peaks unique for genomic ranges.
+#'
+#' @param peakname: 
+#' @return a data.table of ___
+#' helper fn called by getBedList
 getAllLists <- function(meta_peaks) {
   bednames.narrowpeak <- getBedNames("bed narrowPeak", meta_peaks)
   bednames.broadpeak <- getBedNames("bed broadPeak", meta_peaks)
@@ -184,13 +247,27 @@ getAllLists <- function(meta_peaks) {
   return(list(meta_peaks, bed.list.raw, bed.list.narrow1, uniquepeaks.raw, uniquepeaks.narrow1))
 }
 
-
-
 #metachip_narrowPeak[grep("H3", unlist(metachip_narrowPeak[, 16, with=FALSE])), FileAccession]
 
 
-
-### actually called by run_Encode.R
+#'
+#'
+#' \code{extract_encode peaks} takes ENCODE data and outputs a list of peaks
+#'   with metadata, as well as lists of bed files and unique peaks.
+#'
+#' @param chipLocation: string, file location of ENCODE ChIP metadata.tsv
+#' @param dnaseLocation: string, file location of ENCODE DNase metadata.tsv
+#' @param dnamethLocation: string, file location of ENCODE DNA methylation 
+#'   metadata.tsv
+#' @param peakdir: string, path of directory containing peak files in .bed format
+#' @param outdir: string, path of directory to save output
+#' @return NULL, but saves to disk an .Rda file of
+#'   meta_peaks: a data.table of all the peak metadata
+#'   bed.list.raw:
+#'   bed.list.narrow1:
+#'   uniquepeaks.raw:
+#'   uniquepeaks.narrow1:
+#' This is what is actually called by run_Encode.R
 extract_encodepeaks <- function(chipLocation, dnaseLocation, 
                                 dnamethLocation, peakdir, outdir) {
   meta_peaks <- getMetaPeaks(chipLocation, dnaseLocation, dnamethLocation)
@@ -202,7 +279,6 @@ extract_encodepeaks <- function(chipLocation, dnaseLocation,
   uniquepeaks.narrow1 <- allOutput[[5]]
   
   setwd(outdir)
-  ### crap how do i get these out of the fn
   save(meta_peaks, bed.list.raw, bed.list.narrow1, uniquepeaks.raw, uniquepeaks.narrow1, file="encodePeaks_v3.Rda")
 }
 
