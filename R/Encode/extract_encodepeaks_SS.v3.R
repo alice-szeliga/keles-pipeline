@@ -1,9 +1,9 @@
 #just change from bigBed to bed narrowPeak or bed broadPeak compared to extract_encodepeaks_SS.v3.R
 
-rm(list=ls())
-library(data.table)
-library(GenomicRanges)
-library(rtracklayer)
+#rm(list=ls())
+#library(data.table)
+#library(GenomicRanges)
+#library(rtracklayer)
 
 
 #' Capitalizes words in a string
@@ -168,8 +168,8 @@ getBedList <- function(bedNames) {
         getBedDF)
 }
 
-#'
-#'
+#' Gets normal, unique, and narrowpeak bed files
+#' 
 #' \code{getAllLists} separates the metadata of peaks into narrow peaks, broad
 #'   peaks, and methylation data, then returns a variety of lists of bed files,
 #'   including the peaks unique for genomic ranges.
@@ -263,22 +263,21 @@ getAllLists <- function(meta_peaks) {
 #' @param outdir: string, path of directory to save output
 #' @return NULL, but saves to disk an .Rda file of
 #'   meta_peaks: a data.table of all the peak metadata
-#'   bed.list.raw:
-#'   bed.list.narrow1:
-#'   uniquepeaks.raw:
-#'   uniquepeaks.narrow1:
+#'   bed.list.raw: a list of the raw bed file names 
+#'   bed.list.narrow1: a list of all the narrowpeak files
+#'   uniquepeaks.raw: a list of the raw unique peaks
+#'   uniquepeaks.narrow1: a list of the unique narrowpek files
 #' This is what is actually called by run_Encode.R
 extract_encodepeaks <- function(chipLocation, dnaseLocation, 
                                 dnamethLocation, peakdir, outdir) {
   meta_peaks <- getMetaPeaks(chipLocation, dnaseLocation, dnamethLocation)
   setwd(peakdir)
   allOutput <- getAllLists(meta_peaks)
-  # doing this until I find a better way to return
   meta_peaks <- allOutput[[1]]; bed.list.raw <- allOutput[[2]]
   bed.list.narrow1 <- allOutput[[3]]; uniquepeaks.raw <- allOutput[[4]]
   uniquepeaks.narrow1 <- allOutput[[5]]
   
   setwd(outdir)
   save(meta_peaks, bed.list.raw, bed.list.narrow1, uniquepeaks.raw, uniquepeaks.narrow1, file="encodePeaks_v3.Rda")
+  ### RESET WORKING DIR
 }
-

@@ -1,4 +1,4 @@
-source("keles/eqtl.pipeline/R/ENCODE/extract_encodepeaks_SS.v3.R")
+#source("keles/eqtl.pipeline/R/ENCODE/extract_encodepeaks_SS.v3.R")
 
 ## DNase file of only 500 lines
 tinyDnaseLocation <- "keles/eqtl.pipeline/test_data/tinyDNase.tsv"

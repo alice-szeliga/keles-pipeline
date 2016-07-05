@@ -1,7 +1,7 @@
 ### delete later
-library(GenomicRanges)
-library(rtracklayer)
-library(data.table)
+#library(GenomicRanges)
+#library(rtracklayer)
+#library(data.table)
 
 
 ###rewriting this with system.file()

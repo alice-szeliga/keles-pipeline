@@ -1,19 +1,13 @@
 Package: eqtl.pipeline
-
 Type: Package
-
 Title: A Model to Predict Regulatory and Expression Modulating eQTLs
-
 Version: 0.1.0
-
-Authors@R:
+Authors@R: c(
     person("Aliceanne", "Szeliga", email = "aszeliga@hmc.edu", role = c("aut", "cre")),
     person("Sunyoung", "Shin", email = "shin@stat.wisc.edu", role = "aut"),
-    person("Rene, "Welch", email = "welch@stat.wisc.edu", role = "aut"),
-    person("Sunduz", "Keles, email = "keles@stat.wisc.edu", role = "aut")
-
+    person("Rene", "Welch", email = "welch@stat.wisc.edu", role = "aut"),
+    person("Sunduz", "Keles", email = "keles@stat.wisc.edu", role = "aut"))
 Maintainer: Aliceanne Szeliga <aszeliga@hmc.edu>
-
 Description: This model aims to predict regulatory and expression modulating
     sequences from a set of eQTLs (SNPs, small insertions or deletions).
     This package takes in mPRA data and outputs scores of predicted regulatory
@@ -23,9 +17,7 @@ Description: This model aims to predict regulatory and expression modulating
     GM12878-specific ENCODE annotations.
     This package incorporates code that was originally developed for the CAGI
     2015 eQTL causal SNPs challenge, in which the Keles lab ranked 2nd.
-
 Depends: R (>= 3.1.0)
-
 Imports:
     Biostrings(>= 2.40.2),
     data.table(>= 1.9.6),
@@ -33,11 +25,7 @@ Imports:
     gtools(>= 3.5.0),
     magrittr(>= 1.5),
     rtracklayer(>= 1.32.1)
-    
 Suggests: knitr
-
 License: MIT + file LICENSE
-
 VignetteBuilder: knitr
-
 LazyData: TRUE

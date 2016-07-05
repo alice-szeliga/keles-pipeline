@@ -1,7 +1,7 @@
 # just here for testing purposes - delete for package
-source('~/keles/R/eqtl.pipeline/R/8merScoresMODIFIED.R')
-source('~/keles/R/eqtl.pipeline/R/extract_8merscores_ref_SS_MODIFIED2.v2.R')
-source('~/keles/R/eqtl.pipeline/R/construct_summary.8merscores_ref_SS_MODIFIED.v2.R')
+#source('~/keles/R/eqtl.pipeline/R/8merScoresMODIFIED.R')
+#source('~/keles/R/eqtl.pipeline/R/extract_8merscores_ref_SS_MODIFIED2.v2.R')
+#source('~/keles/R/eqtl.pipeline/R/construct_summary.8merscores_ref_SS_MODIFIED.v2.R')
 
 #' Computing Uniprobe 8mer scores
 #' 
