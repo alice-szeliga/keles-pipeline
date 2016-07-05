@@ -11,7 +11,8 @@
 run_Uniprobe_scores <- function() {
   fileLocations <- getDefaultFileLocations()
   uniprobeDirectory <- fileLocations[[1]]
-  inputDTLocation <- fileLocations[[6]]; outputDir <- fileLocations[[7]]
+  inputDTLocation <- fileLocations[[6]]
+  outputDir <- fileLocations[[7]]
   
   # creating human 8mers - saved to outputDir/escores8mer_ref_human_v2.Rda"
   extract8mers(uniprobeDirectory, inputDTLocation, 

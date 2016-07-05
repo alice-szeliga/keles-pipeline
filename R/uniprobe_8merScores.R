@@ -1,6 +1,3 @@
-# adds %>% piping operator
-# useful for neater code
-#library(magrittr)
 
 ## Assumed file length (without header)
 fileLength <- 32896
