@@ -43,6 +43,7 @@ dt2granges <- function(dt) { #
   return(gr)
 }
 
+
 #' Converts data.table to UniqueGranges
 #'
 #' \code{dt2granges} converts a data.table object to unique Granges
@@ -70,12 +71,12 @@ dt2uniquegranges <- function(bed.list) {
   unique.peaks.granges.list <- vector("list", 
                                       length=length(unique(TargetLabInd)))
   UniqueTargetLabInd <- which(table(TargetLabInd) == 1)
-  unique.peaks.granges.list[UniqueTargetLabInd] 
-        <- peaks.granges.list[which(is.element(TargetLabInd, 
+  unique.peaks.granges.list[UniqueTargetLabInd] <- 
+            peaks.granges.list[which(is.element(TargetLabInd, 
                                                 UniqueTargetLabInd))]
   DuplicateTargetLabInd <- which(table(TargetLabInd) > 1)
-  unique.peaks.granges.list[DuplicateTargetLabInd] 
-        <- apply(as.matrix(DuplicateTargetLabInd), 
+  unique.peaks.granges.list[DuplicateTargetLabInd] <- 
+           apply(as.matrix(DuplicateTargetLabInd), 
                  1, 
                  function(ind) {dup.ind<-which(is.element(TargetLabInd, ind)); 
                                 dup.granges.list<-peaks.granges.list[dup.ind]; 

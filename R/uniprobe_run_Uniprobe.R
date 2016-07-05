@@ -1,24 +1,17 @@
-# just here for testing purposes - delete for package
-#source('~/keles/R/eqtl.pipeline/R/8merScoresMODIFIED.R')
-#source('~/keles/R/eqtl.pipeline/R/extract_8merscores_ref_SS_MODIFIED2.v2.R')
-#source('~/keles/R/eqtl.pipeline/R/construct_summary.8merscores_ref_SS_MODIFIED.v2.R')
-
 #' Computing Uniprobe 8mer scores
 #' 
-#' Main function for computing Uniprobe 8mer scores
+#' \code{run_Uniprobe_scores} is the main function for computing Uniprobe 8mer
+#'   scores
 #' 
-#' Depends on 8merScores.R, extract_8merscores.R, and 
-#'   construct_summary.8merscores_ref.R
-#' Default locations set for Keles' lab.
-#' @param uniprobeDirectory: string, location of /Uniprobe scores
-#'   Should have /Human and /Mouse subdirectories
-#' @param inputDTFile: string, location of eQTL data to analyze
-#'   Data set from CAGI 2015 challenge is /ProcessedData/SampleDT.Rdata
-#' @param outputDir: string, directory to save results to
+#' Depends on uniprobe_8merScores.R, uniprobe_extract_8merscores_SS.R, and 
+#'   uniprobe_construct_summary.8merscores_ref_SS.R
+#' Default locations set for Keles' lab and are read in from
+#'   base_getDefaultFileLocations.R.
 #' @return Null. Data saved to disk.
-run_Uniprobe_scores <- function(uniprobeDirectory = "/p/keles/CAGI2015/volumeB/Data/UniProbe", 
-                                inputDTLocation = "/p/keles/CAGI2015/volumeB/ProcessedData/SampleDT.RData",
-                                outputDir = "/p/keles/CAGI2015/volumeB/ProcessedData") {
+run_Uniprobe_scores <- function() {
+  fileLocations <- getDefaultFileLocations()
+  uniprobeDirectory <- fileLocations[[1]]
+  inputDTLocation <- fileLocations[[6]]; outputDir <- fileLocations[[7]]
   
   # creating human 8mers - saved to outputDir/escores8mer_ref_human_v2.Rda"
   extract8mers(uniprobeDirectory, inputDTLocation, 
