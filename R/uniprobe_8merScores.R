@@ -15,6 +15,9 @@ threshhold <- 0.5
 #'
 #' @param DT data.table 
 #' @return a data.table of up to 3 columns
+#' 
+#' @export
+#' @name getCols3to5
 getCols3to5 <- function(DT) {
   ncol(DT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>%
                  DT[,.,with=FALSE] %>% return
@@ -28,10 +31,22 @@ getCols3to5 <- function(DT) {
 #' 
 #' @param DT data.table
 #' @return a data.table with 2 rows and the same number of columns
+#' 
+#' @export
+#' @name getRangeCols
 getRangeCols <-function(DT) {
   apply(DT, 2, range) %>% return
 }
 
+#' Gets the scores of a data table
+#' 
+#' \code{getEscoresInd} does _____
+#' 
+#' @param RangeCols3to5, a 3 column data.table
+#' @return something
+#' 
+#' @export
+#' @name getRangeCols
 getEscoresInd <- function(RangeCols3To5, threshhold) {
     EscoresInd <- intersect(which(RangeCols3To5[1,] >=  -threshhold),
                         which(RangeCols3To5[2,] <= threshhold))
@@ -44,6 +59,9 @@ getEscoresInd <- function(RangeCols3To5, threshhold) {
 #'   and if dt has one extra row, it removes the first row (header) from dt.
 #'   If dt does not have numRowsNoHeader rows, or numRowsNoHeader + 1 rows,
 #'   this function returns an error.
+#' 
+#' @export
+#' @name removeHeader
 removeHeader <- function(numRowsNoHeader, dt) {
   if(nrow(dt) == (numRowsNoHeader + 1)) {
     dt = dt[-1,]
@@ -59,6 +77,9 @@ removeHeader <- function(numRowsNoHeader, dt) {
 #' \code{CheckEscoresCol}
 #'
 #' called in construct_summ, but commented out
+#' 
+#' @export
+#' @name CheckEscoresCol
 CheckEscoresCol <- function(file.name) {
 
   scoresDT <- fread(file.name, header=FALSE)
@@ -85,7 +106,9 @@ CheckEscoresCol <- function(file.name) {
 #'
 #'\code{CreateEscores} is used to 
 #'
-##called in construct_summ
+#' called in construct_summ
+#' @export
+#' @name CreateEscores
 CreateEscores<-function(file.name) {
 
   # might not work saving it like this

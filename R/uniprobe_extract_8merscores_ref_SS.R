@@ -11,10 +11,10 @@ rm(list=ls())
 #' @param sampleDTLocation: string, file path of input data (in .Rdata format)
 #' @param outputDir: string, directory to save output to 
 #' @param organismName: string, all lowercase, "human" or "mouse
-#' 
 #' @return Returns null, saves output in outputDir/escores8mer_ref_human_v2.Rda
-
 #' 
+#' @export
+#' @name extract8mers
 extract8mers <- function(uniprobeDir, inputDTFile, outputDir, organismName) {
   # getting correct subdirectory name from the input /Uniprobe location
   if (organismName == "human") {

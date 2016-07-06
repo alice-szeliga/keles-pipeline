@@ -8,6 +8,8 @@ rm(list=ls())
 #'   in extract_8merscores and creates and labels a list of scores.
 #'
 #' Helper function for constructSummary8merScores
+#' @export
+#' @name createEnrscoresList
 createEnrscoresList <- function(outputDir) {
   humanEscores <- paste(outputDir, "/escores8mer_ref_human_v2.Rda", sep = "")
   load(humanEscores)
@@ -37,6 +39,9 @@ createEnrscoresList <- function(outputDir) {
 #' @param subseq.len: int, 
 #' @param center.len: 
 #' @param center.pos: variable of positions from inputDTFile
+#' 
+#' @export
+#' @name GetSubseqCoordAbs
 GetSubseqCoordAbs <- function(subseq.len, center.len, center.pos) {
   heading      <- ceiling( (subseq.len - center.len) / 2)
   foot         <- floor( (subseq.len - center.len) / 2)
@@ -51,6 +56,9 @@ GetSubseqCoordAbs <- function(subseq.len, center.len, center.pos) {
 #' \code{createSubseq21List} reads in a DT of eQTL data and produces _______
 #' 
 #' Helper function for constructSummary8merScores
+#' 
+#' @export
+#' @name createSubseq21List
 createSubseq21List <- function(inputDTFile) {
   # contains trainingDT
   load(inputDTFile)
@@ -84,6 +92,9 @@ createSubseq21List <- function(inputDTFile) {
 #' @param inputDTFile: string, location of eQTL data table
 #' @param outputDir: string, file location to save results
 #' @return Null. Saves results to disk in outputDir
+#' 
+#' @export
+#' @name constructSummary8merScores
 constructSummary8merScores <- function(outputDir, inputDTFile) {
   
   enrscoresList <- createEnrscoresList(outputDir)

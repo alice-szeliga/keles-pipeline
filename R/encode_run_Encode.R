@@ -32,6 +32,9 @@
 #' Default locations set for Keles' lab and are read in from
 #'   base_getDefaultFileLocations.R. 
 #' @return Null. Data saved to disk.
+#' 
+#' @export
+#' @name run_encode
 run_encode <- function() {
   fileLocations <- getDefaultFileLocations()
   chipLocation <- fileLocations[[2]]; dnaseLocation <- fileLocations[[3]]

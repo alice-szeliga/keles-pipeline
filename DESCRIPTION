@@ -17,7 +17,8 @@ Description: This model aims to predict regulatory and expression modulating
     GM12878-specific ENCODE annotations.
     This package incorporates code that was originally developed for the CAGI
     2015 eQTL causal SNPs challenge, in which the Keles lab ranked 2nd.
-Depends: R (>= 3.1.0)
+Depends:
+    R (>= 3.1.0)
 Imports:
     Biostrings(>= 2.40.2),
     data.table(>= 1.9.6),
@@ -25,7 +26,9 @@ Imports:
     gtools(>= 3.5.0),
     magrittr(>= 1.5),
     rtracklayer(>= 1.32.1)
-Suggests: knitr
+Suggests:
+    knitr
 License: MIT + file LICENSE
 VignetteBuilder: knitr
 LazyData: TRUE
+RoxygenNote: 5.0.1

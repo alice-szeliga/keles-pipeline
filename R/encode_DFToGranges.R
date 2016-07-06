@@ -4,7 +4,10 @@
 #'
 #' modified from a function on http://davetang.org/muse/2015/02/04/bed-granges/
 #' @param dt: a data.table object
-#' @returns Granges object containing same information
+#' @return Granges object containing same information
+#' 
+#' @export
+#' @name dt2granges
 dt2granges <- function(dt) { #
   df <- as.data.frame(dt)
   if(length(df) > 6){
@@ -21,8 +24,6 @@ dt2granges <- function(dt) { #
   if('strand' %in% colnames(df)){
     df$strand <- gsub(pattern="[^+-]+", replacement = '*', x = df$strand)
   }
-
-  library("GenomicRanges")
 
   if(length(df)==3){
     # start position increased by 1 bc/ bed files start from 0, 
@@ -49,7 +50,10 @@ dt2granges <- function(dt) { #
 #' \code{dt2granges} converts a data.table object to unique Granges
 #'
 #' @param dt: a data.table object
-#' @returns Granges object containing unique peaks
+#' @return Granges object containing unique peaks
+#' 
+#' @export
+#' @name dt2uniquegranges
 dt2uniquegranges <- function(bed.list) {
   peaks.granges.list0 <- mapply(dt2granges, bed.list)
   peaks.granges.list <- lapply(peaks.granges.list0, reduce)

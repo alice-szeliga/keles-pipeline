@@ -11,6 +11,9 @@
 #' @param inputDTLocation: file path of eQTLs to be analyzed (.Rda file)
 #' @param outputDir: string, directory to save output to
 #' @return NULL, but saves results to disk as FeaturesEncodePeaksNarrow1_v3.Rda
+#' 
+#' @export
+#' @name construct_overlapping_encodepeaks
 construct_overlapping_encodepeaks <- function(inputDTLocation, outputDir) {
   load(inputDTLOcation)
   trainingGranges<-with(trainingDT, GRanges(paste("chr", chr, sep=""), IRanges(start, end), id=ID))

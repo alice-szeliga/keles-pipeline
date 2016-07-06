@@ -12,6 +12,9 @@
 #'
 #' Helper function for readChip, readDnase, and readDnameth
 #' @param x, a string with words separated by spaces
+#' 
+#' @export
+#' @name simpleCap
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
   paste(toupper(substring(s, 1,1)), substring(s, 2),
@@ -24,7 +27,9 @@ simpleCap <- function(x) {
 #'
 #' @param chipLocation: string, file location of ENCODE ChIP metadata.tsv
 #' @return data.table containing the ChIP info
-##ChIP##
+#' 
+#' @export
+#' @name readChip
 readChip <- function(chipLocation) {
   metachip.all<-fread(chipLocation, header=TRUE)
   
@@ -62,6 +67,9 @@ readChip <- function(chipLocation) {
 #'
 #' @param chipLocation: string, file location of ENCODE Dnase metadata.tsv
 #' @return data.table containing the Dnase info
+#' 
+#' @export
+#' @name readDnase
 readDnase <- function(dnaseLocation) {
   ##DNase##
   metadnase.all<-fread(dnaseLocation, header=TRUE)
@@ -86,6 +94,9 @@ readDnase <- function(dnaseLocation) {
 #' @param chipLocation: string, file location of ENCODE DNA methylation 
 #'   metadata.tsv
 #' @return data.table containing the DNA methylation info
+#' 
+#' @export
+#' @name readDnameth
 readDnameth <- function(dnamethLocation) {
   ##DNAmethylation##
   metamethyl.all<-fread(dnamethLocation, header=TRUE)
@@ -112,6 +123,9 @@ readDnameth <- function(dnamethLocation) {
 #' @param dnamethLocation: string, file location of ENCODE DNA methylation 
 #'   metadata.tsv
 #' @return data.table containing all info from ChIP, DNase, and DNA methylation
+#' 
+#' @export
+#' @name getMetaPeaks
 getMetaPeaks <- function(chipLocation, dnaseLocation, dnamethLocation) {
   metachip_peaks <- readChip(chipLocation)
   metadnase_peaks <- readDnase(dnaseLocation)
@@ -136,6 +150,9 @@ getMetaPeaks <- function(chipLocation, dnaseLocation, dnamethLocation) {
 #' @param file_type: string of file name
 #' @param meta_peaks: data.table of the ENCODE metadata
 #' @return a data.table of strings of all the bed file names
+#' 
+#' @export
+#' @name getBedNames
 getBedNames <- function(file_type, meta_peaks) {
   mapply(function(name) paste(name, ".bed", sep=""), 
          meta_peaks$FileAccession[grep(file_type, meta_peaks$FileFormat)])
@@ -148,6 +165,9 @@ getBedNames <- function(file_type, meta_peaks) {
 #' @param peakname: string, filename
 #' @return a data.table of ___
 #' helper fn called by getBedList
+#' 
+#' @export
+#' @name getBedDF
 getBedDF <- function(peakname) {
   bed.df<-read.table(peakname, header=FALSE)
   bed.dt<-as.data.table(bed.df)
@@ -162,6 +182,9 @@ getBedDF <- function(peakname) {
 #' @param bedNames: a list(?) of .bed file names
 #' @return a list of data.tables
 #' helper fn called by getAllLists
+#' 
+#' @export
+#' @name getBedList
 getBedList <- function(bedNames) {
   apply(as.matrix(bedNames), 
         1, 
@@ -177,6 +200,9 @@ getBedList <- function(bedNames) {
 #' @param peakname: 
 #' @return a data.table of ___
 #' helper fn called by getBedList
+#' 
+#' @export
+#' @name getAllLists
 getAllLists <- function(meta_peaks) {
   bednames.narrowpeak <- getBedNames("bed narrowPeak", meta_peaks)
   bednames.broadpeak <- getBedNames("bed broadPeak", meta_peaks)
@@ -250,7 +276,7 @@ getAllLists <- function(meta_peaks) {
 #metachip_narrowPeak[grep("H3", unlist(metachip_narrowPeak[, 16, with=FALSE])), FileAccession]
 
 
-#'
+#' Extracts peaks from ENCODE data
 #'
 #' \code{extract_encode peaks} takes ENCODE data and outputs a list of peaks
 #'   with metadata, as well as lists of bed files and unique peaks.
@@ -268,6 +294,9 @@ getAllLists <- function(meta_peaks) {
 #'   uniquepeaks.raw: a list of the raw unique peaks
 #'   uniquepeaks.narrow1: a list of the unique narrowpek files
 #' This is what is actually called by run_Encode.R
+#' 
+#' @export
+#' @name extract_encodepeaks
 extract_encodepeaks <- function(chipLocation, dnaseLocation, 
                                 dnamethLocation, peakdir, outdir) {
   meta_peaks <- getMetaPeaks(chipLocation, dnaseLocation, dnamethLocation)

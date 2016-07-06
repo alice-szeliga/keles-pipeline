@@ -8,6 +8,9 @@
 #' Default locations set for Keles' lab and are read in from
 #'   base_getDefaultFileLocations.R.
 #' @return Null. Data saved to disk.
+#' 
+#' @export
+#' @name run_Uniprobe_scores
 run_Uniprobe_scores <- function() {
   fileLocations <- getDefaultFileLocations()
   uniprobeDirectory <- fileLocations[[1]]
