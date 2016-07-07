@@ -78,9 +78,10 @@ construct_overlapping_encodepeaks <- function(inputDTLocation, outputDir) {
   colnames(training_overlap_Bin.No)[13]<-"TF_sum"
   colnames(training_overlap_Bin.Bin)[13]<-"TF_bin"
   
+  previouswd <- getwd()
   setwd(outputDir)
   save(training_overlap_Bin.No, training_overlap_Bin.Bin, file="FeaturesEncodePeaksNarrow1_v3.Rda")
-  
+  setwd(previouswd)
 }
 
 

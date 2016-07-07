@@ -1,22 +1,22 @@
-#source("keles/eqtl.pipeline/R/ENCODE/extract_encodepeaks_SS.v3.R")
+#source("C:/Users/aszeliga/Documents/keles/eqtl.pipeline/R/encode_extract_encodepeaks.R")
 
 ## DNase file of only 500 lines
-tinyDnaseLocation <- "keles/eqtl.pipeline/test_data/tinyDNase.tsv"
+tinyDnaseLocation <- "C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyDNase.tsv"
 ## correct output from previous version of code - metadnase_peaks
-tinyDnaseactual <- load("keles/eqtl.pipeline/test_data/tinyDNase.Rda")
+tinyDnaseactual <- load("C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyDNase.Rda")
 
 ## DNA methylation file of only 500 lines
-tinyDnamethLocation <- "keles/eqtl.pipeline/test_data/tinyDNAmeth.tsv"
+tinyDnamethLocation <- "C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyDNAmeth.tsv"
 ## correct output from previous version of code - metamethyl_peaks
-tinyDnamethactual <- load("keles/eqtl.pipeline/test_data/tinyDNAmeth.Rda")
+tinyDnamethactual <- load("C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyDNAmeth.Rda")
 
 ## ChIP file of only 500 lines
-tinyChIPLocation <- "keles/eqtl.pipeline/test_data/tinyChIP.tsv"
+tinyChIPLocation <- "C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyChIP.tsv"
 ## correct output from previous version of code - metachip_peaks
-tinyChIPactual <- load("keles/eqtl.pipeline/test_data/tinyChIP.Rda")
+tinyChIPactual <- load("C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyChIP.Rda")
 
 ## data.table file of only 100 eQTLs
-tinyDTLocation <- "keles/eqtl.pipeline/test_data/tinyDT.RData"
+tinyDTLocation <- "C:/Users/aszeliga/Documents/keles/eqtl.pipeline/data/test_data/tinyDT.RData"
 
 test_that("readChip fn gives correct output for a small dataset", {
   tinyChIPout <- readChip(tinyChIPLocation)

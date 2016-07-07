@@ -306,7 +306,9 @@ extract_encodepeaks <- function(chipLocation, dnaseLocation,
   bed.list.narrow1 <- allOutput[[3]]; uniquepeaks.raw <- allOutput[[4]]
   uniquepeaks.narrow1 <- allOutput[[5]]
   
+  previouswd <- getwd()
   setwd(outdir)
   save(meta_peaks, bed.list.raw, bed.list.narrow1, uniquepeaks.raw, uniquepeaks.narrow1, file="encodePeaks_v3.Rda")
   ### RESET WORKING DIR
+  setwd(previouswd)
 }
