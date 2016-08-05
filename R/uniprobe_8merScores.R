@@ -1,11 +1,6 @@
-
 ## Assumed file length (without header)
 fileLength <- 32896
 threshhold <- 0.5
-
-
-## helper functions written by me
-
 
 #' Returns 3rd to 5th columns
 #' 
@@ -15,8 +10,6 @@ threshhold <- 0.5
 #'
 #' @param DT data.table 
 #' @return a data.table of up to 3 columns
-#' 
-#' @export
 #' @name getCols3to5
 getCols3to5 <- function(DT) {
   ncol(DT) %>% min(5, .) %>% seq %>% setdiff(., 1:2) %>%
@@ -31,8 +24,6 @@ getCols3to5 <- function(DT) {
 #' 
 #' @param DT data.table
 #' @return a data.table with 2 rows and the same number of columns
-#' 
-#' @export
 #' @name getRangeCols
 getRangeCols <-function(DT) {
   apply(DT, 2, range) %>% return
@@ -59,8 +50,6 @@ getEscoresInd <- function(RangeCols3To5, threshhold) {
 #'   and if dt has one extra row, it removes the first row (header) from dt.
 #'   If dt does not have numRowsNoHeader rows, or numRowsNoHeader + 1 rows,
 #'   this function returns an error.
-#' 
-#' @export
 #' @name removeHeader
 removeHeader <- function(numRowsNoHeader, dt) {
   if(nrow(dt) == (numRowsNoHeader + 1)) {
@@ -72,13 +61,12 @@ removeHeader <- function(numRowsNoHeader, dt) {
   return(dt)
 }
 
+#' Checks the enrichment scores
 #'
-#'
-#' \code{CheckEscoresCol}
+#' \code{CheckEscoresCol} reads in the data table of scores, then returns 
+#'   the extreme scores above the threshold
 #'
 #' called in construct_summ, but commented out
-#' 
-#' @export
 #' @name CheckEscoresCol
 CheckEscoresCol <- function(file.name) {
 
@@ -91,20 +79,11 @@ CheckEscoresCol <- function(file.name) {
   returnValues <- c(EscoresInd, scoresDT, Cols3To5)
 
   return(returnValues)
-
-## easier version
- # file.name %>% fread(., header=FALSE)
- #           %>% removeHeader(filelength, .)
- #            -> scoresDT
- # scoresDT  %>% getRangeCols3to%(.)
- #           %>% getEscoresInd(., threshhold)
- #           %>% c(., scoresDT, Cols3To5)
- #           %>% return(.)
 }
 
+#' Creates enrichment scores
 #'
-#'
-#'\code{CreateEscores} is used to 
+#'\code{CreateEscores} creates the enrichment scores
 #'
 #' called in construct_summ
 #' @export
@@ -118,8 +97,7 @@ CreateEscores<-function(file.name) {
   Escores <- Cols3To5[,EscoresInd,with=FALSE]
 
 
-  ## doing something to the 1st column of scoresDT
-  ## think unlist turns a matrix into a list, but we're working w a column?
+  ## 1st column of scoresDT
   mersSeq1 <- unlist(scoresDT[,1, with=FALSE])
   ## 2nd column of scoresDT
   mersSeq2 <- unlist(scoresDT[,2, with=FALSE])
@@ -132,7 +110,4 @@ CreateEscores<-function(file.name) {
   return(EscoresList)
 }
 
-
-# load("/p/keles/CAGI2015/volumeB/ProcessedData/escores8mer_ref_human.Rda")
-# sum(abs(enrscoresList$FOXN2-Escores[matchInd[[1]]]))
 

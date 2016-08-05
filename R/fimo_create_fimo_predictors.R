@@ -7,6 +7,8 @@
 #'
 #' @return scoreList: a list which will contain the FactorBook, Jaspar, Encode,
 #'   and Deepbind scores.
+#' 
+#' @name makeScoreList
 makeScoreList <- function() {
   scoreList <- vector("list", 13)
   names(scoreList) <- c("fb_minPval", "fb_maxScore", "fb_numOcc", "fb_sumScore",
@@ -25,6 +27,8 @@ makeScoreList <- function() {
 #' @param functionName
 #' @param fimoThreshold
 #' @return Null. Loads 4 .Rdata files into the environment
+#' 
+#' @name loadFimoData
 loadFimoData <- function(refOrAlt, functionName, fimoThreshold) {
   for (name in c("minPval", "maxScore", "sumScore", "numOcc")) {
     load(paste("Training_", refOrAlt, "_thres", fimoThreshold, 
@@ -43,6 +47,8 @@ loadFimoData <- function(refOrAlt, functionName, fimoThreshold) {
 #'   Ex. "fb_minPval"
 #' @param scoreList: a vector containing all scores for FactorBook, ENCODE,
 #'   Jaspar, and Deepbhind 
+#'   
+#' @name addToScoreList
 addToScoreList <- function(trainingD, fimoS, scoreName, scoreList) {
   # split the fimo score rownames into ??
   oIndex <- as.numeric(apply(as.matrix(rownames(fimoS)), 1, function(x){strsplit(x, "_SNP_")[[1]][2]}))
@@ -67,7 +73,8 @@ addToScoreList <- function(trainingD, fimoS, scoreName, scoreList) {
 #'   Ex. "fb_minPval"
 #' @param scoreList: a vector containing all scores for FactorBook, ENCODE,
 #'   Jaspar, and Deepbhind 
-
+#'
+#' @name addAllToScoreList
 addAllToScoreList <- function (trainingD, fimoS, scoreNames, scoreList) {
   # renaming the data which has been loaded in
   fimo.minPval <- out.1
@@ -85,10 +92,11 @@ addAllToScoreList <- function (trainingD, fimoS, scoreNames, scoreList) {
 #'
 #'
 #' \code{getCorrelation} performs a simple correlation between a fimo score and
-#'    the ????? from the eQTL data given.
+#'    the eQTL data given.
 #'
-#' @param fimoS.ordered, ???
+#' @param fimoS.ordered: the fimo scores
 #' @param trainingD: a table of eQTL data
+#' @name getCorrelation
 getCorrelation <- function(fimoS.ordered, trainingD) {
   cor(fimoS.ordered, trainingD$C.A.log2FC)
 }
@@ -102,8 +110,9 @@ getCorrelation <- function(fimoS.ordered, trainingD) {
 #' @param scoreNames: list of strings, contains names of the analysis and the
 #'    different scores. 
 #'    Ex. c("fb_minPval", "fb_maxScore", "fb_numOcc", "fb_sumScore")
-#' @param scoreList:
+#' @param scoreList: list of scores
 #' @return Null. Prints out.
+#' @name createAllCorrelations
 createAllCorrelations <- function(scoreList, scoreNames) {
   # Getting correlation for the minimum p-value
   cat("minPVal\n")
@@ -139,16 +148,16 @@ createAllCorrelations <- function(scoreList, scoreNames) {
 
 #' Exploratory analysis with FactorBook PWM scores
 #'
-#' \code{factorBookAnalysis} 
+#' \code{factorBookAnalysis} performs all analysis of the FactorBook PWM
 #'
-#' @param dataDir
-#' @param fimoDir
-#' @param refOrAlt
-#' @param trainingD
+#' @param dataDir: directory of data
+#' @param fimoDir: directory of FIMO files
+#' @param refOrAlt: string of "ref" or "alt", used for naming
+#' @param trainingD: training data table of eQTL data
 #' @param fimoS
-#' @param scoreList
-#' @return 
-factorBookAnalysis <- function(dataDir, fimoDir) {
+#' @param scoreList: list of scores
+#' @name factorBookAnalysis
+factorBookAnalysis <- function(dataDir, fimoDir, refOrAlt, trainingD, fimoS, scoreList) {
   # First load in the eQTL data
   setwd("/p/keles/CAGI2015/volumeB/Data/")
   trainingD <- read.table("4-eQTL-causal_SNPs_sample_v2.txt", header = T)
@@ -174,9 +183,9 @@ factorBookAnalysis <- function(dataDir, fimoDir) {
 #'
 #' \code{deepbindAnalysis} 
 #'
-#' @param 
-#' @return 
-deepbindAnalysis <- function() {
+#' @param deepBindLocation: string, location of deepbind
+#' @name deepbindAnalysis
+deepbindAnalysis <- function(deepBindLocation = "/p/keles/CAGI2015/volumeB/DeepBind/deepbind") {
   setwd("/p/keles/CAGI2015/volumeB/DeepBind/deepbind")
   db <- read.table("alt_SS.v1_deepbind.txt", header = TRUE)
   
@@ -203,10 +212,11 @@ deepbindAnalysis <- function() {
 
 #' Exploratory analysis with ENCODE PWM scores
 #'
-#' \code{deepbindAnalysis} 
+#' \code{deepbindAnalysis} performs all analysis of the Deepbind data
 #'
-#' @param 
-#' @return 
+#' @param fimoDir: location of the FIMO files
+#' @param trainingD: training data table of eQTL data
+#' @name encodeAnalysis
 encodeAnalysis <- function(fimoDir, trainingD) {
   setwd("/p/keles/CAGI2015/volumeA/Data/After_Nov5")
   trainingD <- read.table("4-eQTL-causal_SNPs_sample_v2.txt", header = T)
@@ -219,16 +229,17 @@ encodeAnalysis <- function(fimoDir, trainingD) {
   scoreList <- addAllToScoreList(trainingD, fimoS, scoreNames, scoreList)
   
   createAllCorrelations(scoreNames)
-  
-  
 }
 
 #' Exploratory analysis with Jaspar PWM scores
 #'
 #' \code{jasparAnalysis} 
 #'
-#' @param 
+#' @param dataDir: string, location of data
+#' @param fimoDir: string, location of FIMO files
+#' @param trainingD: training data table of eQTL data
 #' @return 
+#' @name jasparAnalysis
 jasparAnalysis <- function(dataDir, fimoDir, trainingD) {
   setwd("/p/keles/CAGI2015/volumeB/Data/")
   trainingD <- read.table("4-eQTL-causal_SNPs_sample_v2.txt", header = T)
@@ -247,7 +258,8 @@ jasparAnalysis <- function(dataDir, fimoDir, trainingD) {
 #' \code{outputAllScores} saves the FactorBook, Deepbind, ENCODE, and Jaspar
 #'   scores.
 #' 
-#' 
+#' @param scoreList: list of scores
+#' @name outputAllScores
 outputAllScores <- function(scoreList) {
   setwd("/p/keles/CAGI2015/volumeB/Predictors/")
   save(scoreList, file = "scoreList_Training_alt_thres0.001_pwm.RData")
@@ -258,6 +270,10 @@ outputAllScores <- function(scoreList) {
 #' 
 #' 
 #' @param trainingDLocation: string, location of the training D
+#' @param dataDir: string, location of data
+#' @param fimoDir: string, location of FIMO files
+#' @param trainingDLocation: string, location of training eQTL data
+#' @name create_fimo_predictors
 create_fimo_predictors <- function(trainingDLocation = "/p/keles/CAGI2015/volumeA/Data/After_Nov5/4-eQTL-causal_SNPs_sample_v2.txt", 
                                    dataDir = "/p/keles/CAGI2015/volumeA/Data/After_Nov5",
                                    fimoDir = "/p/keles/CAGI2015/volumeB/Fimo") {

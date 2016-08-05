@@ -1,8 +1,6 @@
 ## fimo threshold
 fimoThreshold <- 0.001
 
-##run this on REF and on ALT
-
 #' Creates directory name for factor
 #'
 #' \code{getFactorName} creates a directory name for a directory within
@@ -11,6 +9,7 @@ fimoThreshold <- 0.001
 #' Relies on previously defined fimoThreshold
 #' Ex: "Training_ref_thres0.001"
 #' @param refOrAlt: string of "ref" or "alt"
+#' @name getFactorName
 getFactorName <- function(refOrAlt) {
   return(paste("Training_", refOrAlt, "_thres", fimoThreshold,   sep = ""))
 }
@@ -21,6 +20,8 @@ getFactorName <- function(refOrAlt) {
 #'  
 #' Ex: "ref_SS.v1.fasta"
 #' @param refOrAlt: string of "ref" or "alt"
+#' 
+#' @name getFastaName
 getFastaName <- function (refOrAlt) {
   return(paste(refOrAlt, "_SS.v1.fasta", sep = ""))
 }
@@ -34,6 +35,7 @@ getFastaName <- function (refOrAlt) {
 #' @param pwmFiles: list of strings, locations of PWM for ENCODE, Factorbook, and Jaspar
 #' @param factorName: string, created by getFactorName
 #' @param fastaFile: string, created by getFastaName
+#' @name runFimo
 runFimo <- function(memeFimoDir = "/p/keles/MEME/meme_4.9.0/src/fimo",
                     outDir,
                     pwmFiles = c("/p/keles/EnhancerPred/volumeD/PWM-Scans/PWM/encode_motifs_for_fimo.txt", 
@@ -59,11 +61,11 @@ runFimo <- function(memeFimoDir = "/p/keles/MEME/meme_4.9.0/src/fimo",
 
 #' Create TF output
 #' 
+#' Creates 4 matrices of transcription factor output
 #' 
-#' 
-#' @param TF.names
-#' @param d1
-#' @return
+#' @param TF.names: list of strings
+#' @param d1: data table
+#' @name createOutput
 createOutput <- function(TF.names, d1) {
   out.1 <- matrix(1, length(d1), length(TF.names))
   colnames(out.1) <- TF.names
@@ -84,11 +86,18 @@ createOutput <- function(TF.names, d1) {
   return(list(out.1, out.2, out.3, out.4))
 }
 
-#' Saves output to directory
+#' Saves FIMO output to directory
 #'
+#' For either Jaspar, Encode, or Factorbook, this function saves the minPval,
+#' maxScore, numOcc, and sumScore.
 #'
-#'
-#'
+#' @param functionName: "Jaspar", "Encode" or "Factorbook"
+#' @param factorName
+#' @param out.1: minPval
+#' @param out.2: maxScore
+#' @param out.3: numOcc
+#' @param out.4: sumScore
+#' @name saveOutput
 saveOutput <- function(functionName, factorName, out.1, out.2, out.3, out.4) {
   cat(factorName, " ", dim(out.1), dim(out.2), dim(out.3), dim(out.4),"\n")
   
@@ -117,9 +126,11 @@ saveOutput <- function(functionName, factorName, out.1, out.2, out.3, out.4) {
 
 #' Summarize FIMO with FactorBook
 #' 
+#' Takes the existing PWM from FactorBook and summarizes the scores
 #' 
-#' 
-#' dslkj
+#' @param factorBookPWM: PWM for Factorbook
+#' @return Null. Saves to disk.
+#' @name summarizeFactorBook
 summarizeFactorBook <- function(factorBookPWM) {
   PWM <- scan(factorBookPWM, what = "", sep = "\n")
   TF.names <- apply(as.matrix(PWM[grep("MOTIF", PWM)]), 1, function(x){strsplit(x, "MOTIF ")[[1]][2]})
@@ -155,10 +166,11 @@ summarizeFactorBook <- function(factorBookPWM) {
 
 #' Summarize FIMO with ENCODE
 #' 
+#' Takes the existing PWM from ENCODE and summarizes the scores
 #' 
-#' 
-#' 
-#' lkj
+#' @param encodePWM: PWM for encode 
+#' @return Null. Saves to disk.
+#' @name summarizeEncode
 summarizeEncode <- function(encodePWM) {
   PWM <- scan(encodePWM, what = "", sep = "\n")
   TF.names <- apply(as.matrix(PWM[grep("MOTIF", PWM)]), 1, function(x){strsplit(x, "MOTIF ")[[1]][2]})
@@ -194,9 +206,11 @@ summarizeEncode <- function(encodePWM) {
 
 #' Summarize FIMO with Jaspar
 #' 
-#' d
+#' Takes the existing PWM from Jaspar and summarizes the scores
 #'
-#' ddf
+#' @param jasparPWM: PWM from Jaspar
+#' @return Null. Saves to disk
+#' @name summarizeJaspar
 summarizeJaspar <- function(jasparPWM) {
   PWM <- scan(jasparPWM, what = "", sep = "\n")
   TF.names <- apply(as.matrix(PWM[grep("MOTIF", PWM)]), 1, function(x){strsplit(x, "MOTIF ")[[1]][2]})
@@ -232,13 +246,18 @@ summarizeJaspar <- function(jasparPWM) {
 #' Runs FactorBook, ENCODE and Jaspar on FIMO
 #' 
 #' 
-#'
+#' 
+#' Should be run once for ref and once for alt.
 #' @param refOrAlt: string, "ref" or "alt"
-#' @param memeFimoDir: string, 
-#' @param outDir:
+#' @param memeFimoDir: string, location of the MEME FIMO files
+#' @param outDir: string, directory to save output to
 #' @param pwmFiles: list of strings, locations of PWMs for ENCODE, Factorbook,
-#'   and Jaspar
-run_fimo_and_summarize <- function () {
+#'   and Jaspar'
+#' @return Null. Saves to disk. 
+#' 
+#' @export
+#' @name run_fimo_and_summarize
+run_fimo_and_summarize <- function (refOrAlt, memeFimoDir, outDir, pwmFiles) {
   factorName <- getFactorName(refOrAlt)
   fastaFile <- getFastaName(refOrAlt)
   runFimo()

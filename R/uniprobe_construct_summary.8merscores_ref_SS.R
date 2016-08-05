@@ -1,7 +1,3 @@
-#### remove this??
-rm(list=ls())
-
-
 #' Imports human and mouse data
 #'
 #' \code{createEnrscoresList} imports the human and mouse .Rda files created
@@ -39,8 +35,6 @@ createEnrscoresList <- function(outputDir) {
 #' @param subseq.len: int, 
 #' @param center.len: 
 #' @param center.pos: variable of positions from inputDTFile
-#' 
-#' @export
 #' @name GetSubseqCoordAbs
 GetSubseqCoordAbs <- function(subseq.len, center.len, center.pos) {
   heading      <- ceiling( (subseq.len - center.len) / 2)
@@ -51,13 +45,12 @@ GetSubseqCoordAbs <- function(subseq.len, center.len, center.pos) {
   subseq.coord
 }
 
-#' title
+#' Create a list from the DT
 #' 
-#' \code{createSubseq21List} reads in a DT of eQTL data and produces _______
+#' \code{createSubseq21List} reads in a DT of eQTL data and produces a list
 #' 
 #' Helper function for constructSummary8merScores
-#' 
-#' @export
+#' @param inputDTFile: string, location of DT
 #' @name createSubseq21List
 createSubseq21List <- function(inputDTFile) {
   # contains trainingDT

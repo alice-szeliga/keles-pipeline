@@ -1,6 +1,3 @@
-## figure this out if i actually need to delete this i mean come on
-#rm(list=ls())
-
 
 #' Calculates ENCODE chromatin scores
 #'

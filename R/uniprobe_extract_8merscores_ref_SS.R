@@ -1,5 +1,3 @@
-#### remove this??
-rm(list=ls())
 
 #' Extract all 8mers for given eQTL sequences
 #' 

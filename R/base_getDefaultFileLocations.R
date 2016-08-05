@@ -17,7 +17,6 @@
 #' @param outputDir: string, directory to save output in
 #' @return A list 
 #' 
-#' @export
 #' @name getDefaultFileLocations
 getDefaultFileLocations <- function(
   uniprobeDirectory = "/p/keles/CAGI2015/volumeB/Data/UniProbe", 

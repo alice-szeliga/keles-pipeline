@@ -1,11 +1,3 @@
-#just change from bigBed to bed narrowPeak or bed broadPeak compared to extract_encodepeaks_SS.v3.R
-
-#rm(list=ls())
-#library(data.table)
-#library(GenomicRanges)
-#library(rtracklayer)
-
-
 #' Capitalizes words in a string
 #'
 #' \code{simpleCap} capitalizes the first letter of every word in a string
